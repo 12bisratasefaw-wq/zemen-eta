@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="am">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ዘመን ዕጣ - ቁጥር ይምረጡ</title>
+    <style>
+        body {
+            background-color: #0d1117;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            padding-bottom: 90px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background-color: #161b22;
+            border-bottom: 1px solid #30363d;
+        }
+        .logo {
+            font-size: 16px;
+            font-weight: bold;
+            color: #f0b90b;
+        }
+        .container {
+            padding: 15px;
+        }
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .section-sub {
+            color: #8b949e;
+            font-size: 13px;
+            margin-bottom: 15px;
+        }
+        .search-box {
+            width: 100%;
+            padding: 12px;
+            background-color: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            color: #ffffff;
+            font-size: 14px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+        .lucky-btns {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .btn-lucky {
+            background-color: #21262d;
+            color: #ffffff;
+            border: 1px solid #30363d;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            cursor: pointer;
+        }
+        .legend {
+            display: flex;
+            gap: 15px;
+            font-size: 12px;
+            color: #8b949e;
+            margin-bottom: 15px;
+            align-items: center;
+        }
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 4px;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        .ticket-btn {
+            background-color: #161b22;
+            color: #ffffff;
+            border: 1px solid #30363d;
+            padding: 12px 0;
+            text-align: center;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .ticket-btn.selected {
+            background-color: #f0b90b;
+            color: #000000;
+            border-color: #f0b90b;
+        }
+        .ticket-btn.sold {
+            background-color: #da3633;
+            color: #ffffff;
+            border-color: #da3633;
+            cursor: not-allowed;
+        }
+        .pagination {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .btn-page {
+            background-color: #21262d;
+            color: #ffffff;
+            border: 1px solid #30363d;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .footer-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #161b22;
+            border-top: 1px solid #30363d;
+            padding: 12px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-sizing: border-box;
+        }
+        .btn-continue {
+            background-color: #f0b90b;
+            color: #000000;
+            border: none;
+            padding: 10px 16px;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="logo">← Back to Raffles</div>
+        <div>ዘመን ዕጣ</div>
+    </div>
+
+    <div class="container">
+        <div class="section-title">ቁጥርዎን ይምረጡ</div>
+        <div class="section-sub">ቲኬቶች ከ #1 እስከ #2,000። ቢያንስ 1፣ ቢበዛ 10 መምረጥ ይችላሉ።</div>
+
+        <input type="text" id="searchBox" class="search-box" placeholder="የቲኬት ቁጥር ይፈልጉ (ለምሳሌ: 45)...">
+
+        <div class="lucky-btns">
+            <button class="btn-lucky" onclick="selectLucky(1)">🎲 Lucky 1</button>
+            <button class="btn-lucky" onclick="selectLucky(3)">🎲 Lucky 3</button>
+            <button class="btn-lucky" onclick="selectLucky(5)">🎲 Lucky 5</button>
+        </div>
+
+        <div class="legend">
+            <span><span class="dot" style="background:#161b22; border:1px solid #30363d;"></span>ያሉ</span>
+            <span><span class="dot" style="background:#f0b90b;"></span>የተመረጡ</span>
+            <span><span class="dot" style="background:#da3633;"></span>የተሸጡ</span>
+        </div>
+
+        <!-- Numbers Grid -->
+        <div id="gridContainer" class="grid">
+            <!-- JavaScript dynamically loads numbers here -->
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination">
+            <button class="btn-page" onclick="prevPage()">← Prev</button>
+            <span id="pageInfo" style="color: #8b949e; font-size: 13px;">ገጽ 1</span>
+            <button class="btn-page" onclick="nextPage()">Next →</button>
+        </div>
+    </div>
+
+    <!-- Bottom Footer Bar -->
+    <div class="footer-bar">
+        <div>
+            <div id="selectedCountText" style="font-size: 12px; color: #8b949e;">0 Selected</div>
+            <div id="totalPriceText" style="font-size: 16px; font-weight: bold; color: #ffffff;">0 ETB</div>
+        </div>
+        <button class="btn-continue" onclick="proceedToPayment()">Proceed to Payment</button>
+    </div>
+
+    <script>
+        const totalTickets = 2000;
+        const pageSize = 30;
+        let currentPage = 1;
+        let selectedTickets = new Set();
+        let soldTickets = new Set([30, 45, 102, 300]); // Sample sold tickets
+
+        function renderGrid() {
+            const gridContainer = document.getElementById('gridContainer');
+            gridContainer.innerHTML = '';
+            
+            const start = (currentPage - 1) * pageSize + 1;
+            const end = Math.min(start + pageSize - 1, totalTickets);
+
+            for (let i = start; i <= end; i++) {
+                const btn = document.createElement('button');
+                btn.className = 'ticket-btn';
+                btn.innerText = i;
+
+                if (soldTickets.has(i)) {
+                    btn.classList.add('sold');
+                } else if (selectedTickets.has(i)) {
+                    btn.classList.add('selected');
+                }
+
+                btn.onclick = () => toggleTicket(i);
+                gridContainer.appendChild(btn);
+            }
+
+            const totalPages = Math.ceil(totalTickets / pageSize);
+            document.getElementById('pageInfo').innerText = `ገጽ ${currentPage} ከ ${totalPages} (እስከ ${totalTickets})`;
+        }
+
+        function toggleTicket(num) {
+            if (soldTickets.has(num)) return;
+
+            if (selectedTickets.has(num)) {
+                selectedTickets.delete(num);
+            } else {
+                if (selectedTickets.size >= 10) {
+                    alert('በግለሰብ ቢበዛ 10 ቲኬቶች ብቻ መምረጥ ይችላሉ!');
+                    return;
+                }
+                selectedTickets.add(num);
+            }
+            renderGrid();
+            updateFooter();
+        }
+
+        function updateFooter() {
+            const count = selectedTickets.size;
+            document.getElementById('selectedCountText').innerText = `${count} Selected`;
+            document.getElementById('totalPriceText',).innerText = `${count * 300} ETB`;
+        }
+
+        function nextPage() {
+            const totalPages = Math.ceil(totalTickets / pageSize);
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderGrid();
+            }
+        }
+
+        function prevPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                renderGrid();
+            }
+        }
+
+        function selectLucky(count) {
+            selectedTickets.clear();
+            let added = 0;
+            while (added < count) {
+                let rand = Math.floor(Math.random() * totalTickets) + 1;
+                if (!soldTickets.has(rand) && !selectedTickets.has(rand)) {
+                    selectedTickets.add(rand);
+                    added++;
+                }
+            }
+            renderGrid();
+            updateFooter();
+        }
+
+        function proceedToPayment() {
+            if (selectedTickets.size === 0) {
+                alert('እባክዎ ቢያንስ አንድ ቲኬት ይምረጡ!');
+                return;
+            }
+            alert('ወደ ክፍያ ማስተላለፊያ ገጽ ይገባል! የተመረጡ ቁጥሮች: ' + Array.from(selectedTickets).join(', '));
+        }
+
+        // Initialize on load
+        renderGrid();
+    </script>
+
+</body>
+</html>
