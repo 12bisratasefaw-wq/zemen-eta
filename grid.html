@@ -279,12 +279,15 @@
         }
 
         function proceedToPayment() {
-            if (selectedTickets.size === 0) {
-                alert('እባክዎ ቢያንስ አንድ ቲኬት ይምረጡ!');
-                return;
-            }
-            alert('ወደ ክፍያ ማስተላለፊያ ገጽ ይገባል! የተመረጡ ቁጥሮች: ' + Array.from(selectedTickets).join(', '));
-        }
+    if (selectedTickets.size === 0) {
+        alert('እባክዎ መጀመሪያ ቲኬት ይምረጡ');
+        return;
+    }
+    
+    // የተመረጡትን ቲኬቶች ይዞ ወደ ክፍያ ገጽ እንዲሄድ (የክፍያ ገጽዎን ትክክለኛ ስም እዚህ ያስገቡ)
+    window.location.href = 'payment.html?tickets=' + Array.from(selectedTickets).join(',');
+}
+
 
         // Initialize on load
         renderGrid();
